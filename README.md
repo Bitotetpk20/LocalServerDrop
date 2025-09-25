@@ -167,6 +167,9 @@ Built applications will be available in the `dist/` directory.
 > [!IMPORTANT]
 > Windows Firewall may block inbound connections the first time the server runs. Approve the prompt when Windows asks to allow access. If needed, you can add a rule to allow TCP 8080.
 
+<img width="1557" height="1039" alt="Screenshot 2025-09-25 205903" src="https://github.com/user-attachments/assets/98aa778e-5276-44ed-967f-6a16d9186c34" />
+
+
 Windows PowerShell (run as Administrator):
 
 ```powershell
