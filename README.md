@@ -1,25 +1,6 @@
 # LocalServerDrop
 
-A cross-platform Electron desktop application for local file sharing with a built-in web server. Share files effortlessly across your local network with a modern, intuitiv## Configuration
-
-- The server runs on ## Troubleshooting
-
-> [!TIP]
-> **Common Issues and Solutions:**
-> 
-> **403 Forbidden on delete:**
-> - The admin token likely doesn't match. Restart the Electron app and try the delete again from within the app UI.
-> - If testing manually, ensure you're sending the correct `X-Admin-Token` for the current session.
-> 
-> **CSS not applying after clone:**
-> - Run `npm run buildcss` to generate `renderer/css/output.css` (it is not tracked in git).00 by default. To change this today you need to edit `PORT` in `backend/server.js` and update hardcoded references where applicable.
-- Binding host can be configured via environment variable:
-   - `LSD_BIND_HOST` (default: `127.0.0.1`)
-- Admin token is managed automatically by the Electron app:
-   - `LSD_ADMIN_TOKEN` is set by the Electron main process per run. You typically do not need to set this manually unless you're driving the server outside the app.
-
-> [!NOTE]
-> Keeping the binding host on `127.0.0.1` restricts access to the local machine only. Change `LSD_BIND_HOST` to `0.0.0.0` to allow network access.ace.
+A cross-platform Electron desktop application for local file sharing with a built-in web server. Share files fast across your local network.
 
 ## What is LocalServerDrop?
 
@@ -40,7 +21,7 @@ Perfect for developers, designers, content creators, or anyone who needs to quic
 
 - **Drag & Drop Upload**: Simple file uploading with visual feedback
 - **Cross-Platform**: Works on Windows, macOS, and Linux
-- **Local Network Sharing**: Access files via web browser at `localhost:3000`
+- **Local Network Sharing**: Access files via web browser at `localhost:3000` (Or setup port forwarding for public use)
 - **Real-time File Management**: View, download, and delete files instantly
 - **Modern UI**: Beautiful dark theme with gradient effects and smooth animations
 - **File Type Recognition**: Visual icons and color coding for different file types
@@ -209,9 +190,65 @@ Built applications will be available in the `dist/` directory.
    - Requires header: `X-Admin-Token: <token>`
 - `GET /` - Serve the web interface
 
+## API Usage
+
+You can interact with LocalServerDrop's API programmatically for automation or integration purposes. Below are examples using curl and JavaScript fetch.
+
+### Upload a File
+```bash
+curl -X POST -F "file=@/path/to/your/file.txt" http://localhost:3000/upload
+```
+
+### List Uploaded Files
+```bash
+curl http://localhost:3000/list
+```
+Response: `[{"name": "file.txt", "size": 1024}]`
+
+### Download a File
+```bash
+curl -O http://localhost:3000/files/file.txt
+```
+
+### Delete a File
+```bash
+# Replace TOKEN_HERE with your actual admin token
+curl -X DELETE "http://localhost:3000/delete/file.txt" \
+     -H "X-Admin-Token: TOKEN_HERE"
+```
+
+### JavaScript Examples
+```javascript
+// Upload
+const formData = new FormData();
+formData.append('file', fileInput.files[0]);
+fetch('http://localhost:3000/upload', {
+  method: 'POST',
+  body: formData
+});
+
+// List files
+fetch('http://localhost:3000/list')
+  .then(res => res.json())
+  .then(files => console.log(files));
+
+// Download
+window.open('http://localhost:3000/files/filename.ext');
+
+// Delete
+const token = 'your-admin-token';
+fetch(`http://localhost:3000/delete/filename.ext`, {
+  method: 'DELETE',
+  headers: { 'X-Admin-Token': token }
+});
+```
+
+> [!NOTE]
+> The admin token for delete operations is generated per app session. For programmatic access, you may need to extract it from the running Electron app or set `LSD_ADMIN_TOKEN` environment variable when running the server standalone.
+
 ## Configuration
 
-- The server runs on port 3000 by default. To change this today you need to edit `PORT` in `backend/server.js` and update hardcoded references where applicable.
+- The server runs on port 3000 by default. To change this, you need to edit `PORT` in `backend/server.js` and update hardcoded references where applicable. (I will change later when not lazy)
 - Binding host can be configured via environment variable:
    - `LSD_BIND_HOST` (default: `127.0.0.1`)
    - Note: Keeping it on `127.0.0.1` restricts access to the local machine only.
