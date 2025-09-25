@@ -4,7 +4,7 @@ A cross-platform Electron desktop application that will act as a local file serv
 
 ## What is LocalServerDrop?
 
-LocalServerDrop combines the convenience of a desktop application with the accessibility of a web server to create a seamless file-sharing solution. Upload files through the desktop app or web interface, and share them instantly across your local network. Perfect for quick file transfers between devices without cloud dependencies or complex setup.
+LocalServerDrop combines the convenience of a desktop application with the accessibility of a web server to create a seamless filesharing solution. Upload files through the desktop app or web interface, and share them instantly across your local network. Perfect for quick file transfers between devices without cloud dependencies or complex setup.
 
 <img width="1463" height="1084" alt="Screenshot 2025-09-25 172102" src="https://github.com/user-attachments/assets/9e1fdd7c-3c17-4c5c-8604-b7963a2f9111" />
 <img width="2047" height="884" alt="Screenshot 2025-09-25 172226" src="https://github.com/user-attachments/assets/bcf20018-3e3c-48cc-9114-e127fe068118" />
@@ -13,12 +13,13 @@ LocalServerDrop combines the convenience of a desktop application with the acces
 
 ## Why Use LocalServerDrop?
 
-- **Privacy First**: No cloud services, everything stays on your network
-- **Simple Setup**: No configuration required, works out of the box
-- **Cross-Device Compatible**: Access from any device with a web browser
-- **Lightweight**: Minimal resource usage, fast performance
-- **Professional UI**: Modern design that's pleasant to use
-- **Developer Friendly**: Clean, well-structured codebase for easy modification
+- **Privacy First**: No cloud services, everything stays on your network.
+- **Simple Setup**: No configuration required, works out of the box.
+- **Cross-Device Compatible**: Access from any device with a web browser or run the application which is also multiplatform (Electron)
+- **Fast**: Local network speeds should be blazing fast, much MUCH faster than any online provider.
+- **Professional UI**: Modern design that's pleasant to use.
+- **Secure**: Only users with the admin token can delete files, ensuring unauthorized users cannot remove shared content. IPC handlers and correct filepath resolution make it much safer than most other available solutions that usually offer little to no security.
+- **Developer Friendly**: Clean codebase for easy modification.
 
 Perfect for developers, designers, content creators, or anyone who needs to quickly share files across devices without the hassle of cloud services or complex network setup.
 
