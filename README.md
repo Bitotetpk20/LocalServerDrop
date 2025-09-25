@@ -1,10 +1,15 @@
 # LocalServerDrop
 
-A cross-platform Electron desktop application for local file sharing with a built-in web server. Share files fast across your local network.
+A cross-platform Electron desktop application that will act as a local file server sharing with a built-in Express web server, with Multer storage. Share files fast across your local network.
 
 ## What is LocalServerDrop?
 
 LocalServerDrop combines the convenience of a desktop application with the accessibility of a web server to create a seamless file-sharing solution. Upload files through the desktop app or web interface, and share them instantly across your local network. Perfect for quick file transfers between devices without cloud dependencies or complex setup.
+
+<img width="1463" height="1084" alt="Screenshot 2025-09-25 172102" src="https://github.com/user-attachments/assets/9e1fdd7c-3c17-4c5c-8604-b7963a2f9111" />
+<img width="2047" height="884" alt="Screenshot 2025-09-25 172226" src="https://github.com/user-attachments/assets/bcf20018-3e3c-48cc-9114-e127fe068118" />
+
+
 
 ## Why Use LocalServerDrop?
 
@@ -274,6 +279,9 @@ For testing with **Postman** or **curl**:
 curl -X DELETE "http://127.0.0.1:3000/delete/filename.ext" \
      -H "X-Admin-Token: TOKEN_HERE"
 ```
+
+<img width="885" height="448" alt="Screenshot 2025-09-25 155349" src="https://github.com/user-attachments/assets/e4665baa-e3ea-4f74-8530-74990f74ea68" />
+
 
 > [!NOTE]
 > The server's CORS configuration specifically allows the `X-Admin-Token` header for browser console testing and external API tools. Since the token is per-session and managed by the app, delete actions should generally be performed via the Electron UI. Manual testing requires the exact token for that run.
