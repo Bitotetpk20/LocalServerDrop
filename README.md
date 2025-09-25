@@ -79,6 +79,12 @@ LocalServerDrop/
 - **npm**
 
 ### Installation
+1. Download the installer
+2. Run as administrator (for proper installation)
+3. Follow the setup wizard
+4. Launch from Start Menu or desktop shortcut
+
+### Running with Node.js runtime (No installation)
 
 1. **Clone the repository**
    ```bash
