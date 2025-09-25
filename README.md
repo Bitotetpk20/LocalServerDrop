@@ -111,8 +111,8 @@ LocalServerDrop/
    npm run buildcss
    ```
 
-   > [!NOTE]
-   > The CSS build step is required because `output.css` is not tracked in git. You must run this command before starting the application.
+> [!NOTE]
+> The CSS build step is required because `output.css` is not tracked in git. You must run this command before starting the application.
 
 4. **Start the application**
    ```bash
