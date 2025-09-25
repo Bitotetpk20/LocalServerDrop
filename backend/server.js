@@ -5,8 +5,8 @@ const fs = require('fs');
 const { app: electronApp } = require('electron');
 const expressApp = express();
 
-const PORT = 3000; //some places are hardcoded to this port, change if needed
-const BIND_HOST = process.env.LSD_BIND_HOST || '127.0.0.1';
+const PORT = process.env.LSD_PORT || 8080; //some places are hardcoded to this port, change if needed
+const BIND_HOST = process.env.LSD_BIND_HOST || '0.0.0.0';
 
 const ADMIN_TOKEN = process.env.LSD_ADMIN_TOKEN;
 
@@ -19,9 +19,10 @@ const SHARED_DIR = isDev ?
 expressApp.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    // admin token header for delete requests on browser console
-    //for postman or curl input token
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-Admin-Token');
+    res.header('Access-Control-Allow-Credentials', 'false');
+    res.header('Access-Control-Max-Age', '86400'); // 24 hours
+    
     if (req.method === 'OPTIONS') {
         return res.sendStatus(204);
     }

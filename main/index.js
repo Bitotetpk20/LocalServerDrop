@@ -63,7 +63,7 @@ ipcMain.handle('open-external', async (_event, url) => {
 
 ipcMain.handle('delete-file', async (_event, filename) => {
   try {
-    const response = await fetch(`http://127.0.0.1:3000/delete/${encodeURIComponent(filename)}`, {
+    const response = await fetch(`http://localhost:8080/delete/${encodeURIComponent(filename)}`, {
       method: 'DELETE',
       headers: {
         'X-Admin-Token': ADMIN_TOKEN

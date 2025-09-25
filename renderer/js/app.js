@@ -1,6 +1,13 @@
 const input = document.getElementById('fileInput');
 const info = document.getElementById('fileInfo');
 
+function getServerUrl() {
+  if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:8080';
+  }
+  return `http://${window.location.hostname}:8080`;
+}
+
 function getFileIcon(extension) {
   const iconMap = {
     'pdf': '📄', 'doc': '📝', 'docx': '📝', 'txt': '📄',
@@ -61,7 +68,7 @@ input.addEventListener('change', () => {
   const formData = new FormData();
   formData.append('file', file);
 
-  fetch('http://127.0.0.1:3000/upload', {
+  fetch(`${getServerUrl()}/upload`, {
     method: 'POST',
     body: formData
   })
@@ -102,7 +109,7 @@ input.addEventListener('change', () => {
 });
 
 function loadFiles() {
-  fetch('http://127.0.0.1:3000/list')
+  fetch(`${getServerUrl()}/list`)
     .then(res => res.json())
     .then(files => {
       const tbody = document.getElementById('filesTable').querySelector('tbody');
@@ -155,7 +162,7 @@ function loadFiles() {
             </div>
           </td>
           <td class="px-8 py-6 border-r border-slate-700/30">
-            <a href="http://127.0.0.1:3000/files/${encodeURIComponent(fileName)}" download>
+            <a href="${getServerUrl()}/files/${encodeURIComponent(fileName)}" download>
               <button class="group/btn relative overflow-hidden px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 rounded-xl transition-all duration-300 text-white font-semibold shadow-lg hover:shadow-blue-500/25 hover:scale-105">
                 <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-500"></div>
                 <div class="relative flex items-center space-x-2">
@@ -220,7 +227,7 @@ function shareFile(filename) {
         alert(`Failed to get file path: ${err}`);
       });
   } else {
-    const fileUrl = `http://127.0.0.1:3000/files/${encodeURIComponent(filename)}`;
+    const fileUrl = `${getServerUrl()}/files/${encodeURIComponent(filename)}`;
     navigator.clipboard.writeText(fileUrl).then(() => {
       alert(`File URL copied to clipboard: ${fileUrl}`);
     }).catch(() => {
@@ -269,15 +276,58 @@ function updateTableHeaders() {
 
 function openInBrowser(url) {
   if (window.browserAPI && window.browserAPI.openExternal) {
-    // In Electron app - open in system browser
     window.browserAPI.openExternal(url);
   } else {
-    // Fallback for web browser
     window.open(url, '_blank');
   }
+}
+
+async function getDeviceIP() {
+  try {
+    
+    const pc = new RTCPeerConnection({iceServers: []});
+    const noop = () => {};
+    
+    pc.createDataChannel('');
+    pc.createOffer().then(pc.setLocalDescription.bind(pc), noop);
+    
+    return new Promise((resolve) => {
+      pc.onicecandidate = (ice) => {
+        if (!ice || !ice.candidate || !ice.candidate.candidate) return;
+        const myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate);
+        if (myIP) {
+          resolve(myIP[1]);
+          pc.onicecandidate = noop;
+        }
+      };
+    });
+  } catch (e) {
+    return 'localhost';
+  }
+}
+
+async function updateServerUrlDisplay() {
+  const serverUrlText = document.getElementById('serverUrlText');
+  if (serverUrlText) {
+    const deviceIP = await getDeviceIP();
+    if (deviceIP && deviceIP !== 'localhost') {
+      serverUrlText.textContent = `${deviceIP}:8080`;
+    } else {
+      serverUrlText.textContent = 'localhost:8080';
+    }
+  }
+}
+
+async function openServerUrl() {
+  const deviceIP = await getDeviceIP();
+  const serverUrl = deviceIP && deviceIP !== 'localhost' ? 
+    `http://${deviceIP}:8080` : 
+    'http://localhost:8080';
+  openInBrowser(serverUrl);
 }
 
 window.addEventListener('load', () => {
   updateTableHeaders();
   loadFiles();
+  updateServerUrlDisplay();
 });

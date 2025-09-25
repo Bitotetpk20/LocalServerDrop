@@ -27,7 +27,7 @@ Perfect for developers, designers, content creators, or anyone who needs to quic
 
 - **Drag & Drop Upload**: Simple file uploading with visual feedback
 - **Cross-Platform**: Works on Windows, macOS, and Linux
-- **Local Network Sharing**: Access files via web browser at `localhost:3000` (Or setup port forwarding for public use)
+- **Local Network Sharing**: Access files via web browser at `localhost:8080` (Or use your device IPv4 shown in the app for LAN access)
 - **Real-time File Management**: View, download, and delete files instantly
 - **Modern UI**: Beautiful dark theme with gradient effects and smooth animations
 - **File Type Recognition**: Visual icons and color coding for different file types
@@ -151,24 +151,40 @@ Built applications will be available in the `dist/` directory.
 2. Drag and drop files onto the upload zone, or click to browse
 3. Files are automatically uploaded to the local server
 4. Use the "File Vault" section to manage uploaded files
-5. Click the "localhost:3000" button to open the web interface
+5. Click the server button to open the web interface — the button shows your device IPv4 (for example, `192.168.1.50:8080`) inside Electron; on the same machine it may show `localhost:8080`
 
 ### Web Interface
 1. Open any web browser
-2. Navigate to `http://localhost:3000`
+2. Navigate to `http://localhost:8080` on the same machine, or `http://<your-device-ip>:8080` from other devices on the same network
 3. Upload and download files through the web interface
 4. Perfect for sharing with other devices on your network
 
 ### Network Sharing
-- Other devices on your network can access files by visiting `http://[YOUR-IP]:3000`
+- The Electron UI shows your device IPv4 so others can connect (for example, `http://192.168.1.50:8080`)
+- Other devices on your network can access files by visiting `http://[YOUR-IP]:8080`
 - Find your IP address using `ipconfig` (Windows) or `ifconfig` (Mac/Linux)
+
+> [!IMPORTANT]
+> Windows Firewall may block inbound connections the first time the server runs. Approve the prompt when Windows asks to allow access. If needed, you can add a rule to allow TCP 8080.
+
+Windows PowerShell (run as Administrator):
+
+```powershell
+New-NetFirewallRule -DisplayName "LocalServerDrop 8080" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8080
+```
+
+To remove later:
+
+```powershell
+Remove-NetFirewallRule -DisplayName "LocalServerDrop 8080"
+```
 
 > [!TIP]
 > To share files across your network, replace `[YOUR-IP]` with your actual IP address. Use `ipconfig` on Windows or `ifconfig` on Mac/Linux to find your IP.
 
 ## Security Features
 
-- **Local Network Only**: Server binds to localhost by default
+- **Local Network Ready**: Server binds to `0.0.0.0` by default (listens on all interfaces). Use a trusted network or change binding to `127.0.0.1` to restrict to the local machine only.
 - **Admin Token Authentication**: File deletion requires admin token
 - **Path Traversal Protection**: Prevents unauthorized file access
 - **Sandboxed Frontend**: Electron security best practices implemented
@@ -176,7 +192,7 @@ Built applications will be available in the `dist/` directory.
 > [!NOTE]
 > **Security Notes:**
 > - **Per-session admin token**: A new admin token is generated on each app start and passed to the server via `X-Admin-Token` header for delete operations. Restarting the app changes the token.
-> - **Upload safety**: Filenames are sanitized to their basename (no path components) with a 100 MB size limit (configurable in code).
+> - **Upload safety**: Filenames are sanitized to their basename (no path components). No explicit file size limit is enforced by default; add a Multer limit in code if you need one.
 
 ## UI Features
 
@@ -202,25 +218,25 @@ You can interact with LocalServerDrop's API programmatically for automation or i
 
 ### Upload a File
 ```bash
-curl -X POST -F "file=@/path/to/your/file.txt" http://localhost:3000/upload
+curl -X POST -F "file=@/path/to/your/file.txt" http://localhost:8080/upload
 ```
 
 ### List Uploaded Files
 ```bash
-curl http://localhost:3000/list
+curl http://localhost:8080/list
 ```
 Response: `[{"name": "file.txt", "size": 1024}]`
 
 ### Download a File
 ```bash
-curl -O http://localhost:3000/files/file.txt
+curl -O http://localhost:8080/files/file.txt
 ```
 
 ### Delete a File
 ```bash
 # Replace TOKEN_HERE with your actual admin token
-curl -X DELETE "http://localhost:3000/delete/file.txt" \
-     -H "X-Admin-Token: TOKEN_HERE"
+curl -X DELETE "http://localhost:8080/delete/file.txt" \
+   -H "X-Admin-Token: TOKEN_HERE"
 ```
 
 ### JavaScript Examples
@@ -228,22 +244,22 @@ curl -X DELETE "http://localhost:3000/delete/file.txt" \
 // Upload
 const formData = new FormData();
 formData.append('file', fileInput.files[0]);
-fetch('http://localhost:3000/upload', {
+fetch('http://localhost:8080/upload', {
   method: 'POST',
   body: formData
 });
 
 // List files
-fetch('http://localhost:3000/list')
+fetch('http://localhost:8080/list')
   .then(res => res.json())
   .then(files => console.log(files));
 
 // Download
-window.open('http://localhost:3000/files/filename.ext');
+window.open('http://localhost:8080/files/filename.ext');
 
 // Delete
 const token = 'your-admin-token';
-fetch(`http://localhost:3000/delete/filename.ext`, {
+fetch(`http://localhost:8080/delete/filename.ext`, {
   method: 'DELETE',
   headers: { 'X-Admin-Token': token }
 });
@@ -254,20 +270,35 @@ fetch(`http://localhost:3000/delete/filename.ext`, {
 
 ## Configuration
 
-- The server runs on port 3000 by default. To change this, you need to edit `PORT` in `backend/server.js` and update hardcoded references where applicable. (I will change later when not lazy)
+- Port can be configured via environment variable:
+   - `LSD_PORT` (default: `8080`)
 - Binding host can be configured via environment variable:
-   - `LSD_BIND_HOST` (default: `127.0.0.1`)
-   - Note: Keeping it on `127.0.0.1` restricts access to the local machine only.
+   - `LSD_BIND_HOST` (default: `0.0.0.0` to listen on all interfaces)
+   - Set to `127.0.0.1` to restrict access to the local machine only
 - Admin token is managed automatically by the Electron app:
-   - `LSD_ADMIN_TOKEN` is set by the Electron main process per run. You typically do not need to set this manually unless you’re driving the server outside the app.
+   - `LSD_ADMIN_TOKEN` is set by the Electron main process per run. You typically do not need to set this manually unless you’re running the server outside the app.
+
+Windows PowerShell (per-session env var):
+
+```powershell
+$env:LSD_PORT = 9000
+$env:LSD_BIND_HOST = "127.0.0.1"
+```
+
+Windows Command Prompt:
+
+```bat
+set LSD_PORT=9000
+set LSD_BIND_HOST=127.0.0.1
+```
 
 ### Test delete from a browser console or external tools
-If you need to verify delete via browser, open `http://127.0.0.1:3000` and in the DevTools console run:
+If you need to verify delete via browser, open `http://127.0.0.1:8080` and in the DevTools console run:
 
 ```js
 const TOKEN = 'paste-the-admin-token-here';
 const NAME = 'existing-file.ext';
-fetch(`http://127.0.0.1:3000/delete/${encodeURIComponent(NAME)}`, {
+fetch(`http://127.0.0.1:8080/delete/${encodeURIComponent(NAME)}`, {
    method: 'DELETE',
    headers: { 'X-Admin-Token': TOKEN }
 }).then(async r => ({ status: r.status, text: await r.text() }))
@@ -277,8 +308,8 @@ fetch(`http://127.0.0.1:3000/delete/${encodeURIComponent(NAME)}`, {
 For testing with **Postman** or **curl**:
 ```bash
 # Replace TOKEN_HERE with your actual admin token
-curl -X DELETE "http://127.0.0.1:3000/delete/filename.ext" \
-     -H "X-Admin-Token: TOKEN_HERE"
+curl -X DELETE "http://127.0.0.1:8080/delete/filename.ext" \
+   -H "X-Admin-Token: TOKEN_HERE"
 ```
 
 <img width="885" height="448" alt="Screenshot 2025-09-25 155349" src="https://github.com/user-attachments/assets/e4665baa-e3ea-4f74-8530-74990f74ea68" />
