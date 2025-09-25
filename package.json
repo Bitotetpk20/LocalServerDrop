@@ -1,0 +1,59 @@
+{
+  "name": "localserverdrop",
+  "version": "1.0.0",
+  "description": "Local file sharing server and multiplatform electron app",
+  "main": "main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "nodemon --watch main --watch renderer --watch preload --watch backend --ext html,js,css --exec \"electron .\"",
+    "buildcss": "npx @tailwindcss/cli -i ./renderer/css/input.css -o ./renderer/css/output.css --watch",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "dist": "npm run build"
+  },
+  "author": "KristupasJon",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "electron": "^38.1.2",
+    "electron-builder": "^26.0.12",
+    "tailwindcss": "^4.1.13",
+    "nodemon": "^3.1.10"
+  },
+  "build": {
+    "appId": "com.kristupasjon.localserverdrop",
+    "productName": "LocalServerDrop",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main/**/*",
+      "renderer/**/*",
+      "preload/**/*",
+      "backend/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "renderer/assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "renderer/assets/icon.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "renderer/assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Outer circle for the base -->
+  <circle cx="50" cy="50" r="50" fill="#8B5CF6" />
+  <!-- Gradient for the 3D effect -->
+  <radialGradient id="grad" cx="50%" cy="50%" r="50%" fx="30%" fy="30%">
+    <stop offset="0%" style="stop-color: #ffffff; stop-opacity: 0.8" />
+    <stop offset="100%" style="stop-color: #8B5CF6; stop-opacity: 1" />
+  </radialGradient>
+  <circle cx="50" cy="50" r="50" fill="url(#grad)" />
+</svg>
