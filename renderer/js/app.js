@@ -136,8 +136,10 @@ function loadFiles() {
         `.replace(/\s+/g, ' ').trim();
         row.style.animationDelay = `${index * 100}ms`;
         
-        // extension for icon
-        const fileExt = file.split('.').pop().toLowerCase();
+        const fileName = typeof file === 'string' ? file : file.name;
+        const fileSize = typeof file === 'string' ? 0 : file.size;
+        
+        const fileExt = fileName.split('.').pop().toLowerCase();
         const fileIcon = getFileIcon(fileExt);
         
         row.innerHTML = `
@@ -147,13 +149,13 @@ function loadFiles() {
                 <span class="text-lg">${fileIcon}</span>
               </div>
               <div class="flex-1">
-                <p class="text-slate-200 font-semibold group-hover/row:text-white transition-colors duration-200">${file}</p>
-                <p class="text-slate-500 text-xs">File • ${formatFileSize(Math.random() * 5 + 0.1)}</p>
+                <p class="text-slate-200 font-semibold group-hover/row:text-white transition-colors duration-200">${fileName}</p>
+                <p class="text-slate-500 text-xs">File • ${formatFileSize(fileSize / (1024 * 1024))}</p>
               </div>
             </div>
           </td>
           <td class="px-8 py-6 border-r border-slate-700/30">
-            <a href="http://127.0.0.1:3000/files/${encodeURIComponent(file)}" download>
+            <a href="http://127.0.0.1:3000/files/${encodeURIComponent(fileName)}" download>
               <button class="group/btn relative overflow-hidden px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 rounded-xl transition-all duration-300 text-white font-semibold shadow-lg hover:shadow-blue-500/25 hover:scale-105">
                 <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-500"></div>
                 <div class="relative flex items-center space-x-2">
@@ -164,7 +166,7 @@ function loadFiles() {
             </a>
           </td>
           <td class="px-8 py-6 ${isElectron ? 'border-r border-slate-700/30' : ''}">
-            <button onclick="shareFile('${file}')" class="group/btn relative overflow-hidden px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 rounded-xl transition-all duration-300 text-white font-semibold shadow-lg hover:shadow-emerald-500/25 hover:scale-105">
+            <button onclick="shareFile('${fileName}')" class="group/btn relative overflow-hidden px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 rounded-xl transition-all duration-300 text-white font-semibold shadow-lg hover:shadow-emerald-500/25 hover:scale-105">
               <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-500"></div>
               <div class="relative flex items-center space-x-2">
                 <span>🔗</span>
@@ -174,7 +176,7 @@ function loadFiles() {
           </td>
           ${isElectron ? `
             <td class="px-8 py-6">
-              <button onclick="deleteFile('${file}')" class="group/btn relative overflow-hidden px-6 py-3 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 rounded-xl transition-all duration-300 text-white font-semibold shadow-lg hover:shadow-red-500/25 hover:scale-105">
+              <button onclick="deleteFile('${fileName}')" class="group/btn relative overflow-hidden px-6 py-3 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 rounded-xl transition-all duration-300 text-white font-semibold shadow-lg hover:shadow-red-500/25 hover:scale-105">
                 <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-500"></div>
                 <div class="relative flex items-center space-x-2">
                   <span>🗑️</span>
@@ -262,6 +264,16 @@ function updateTableHeaders() {
       </div>
     `;
     headerRow.appendChild(deleteHeader);
+  }
+}
+
+function openInBrowser(url) {
+  if (window.browserAPI && window.browserAPI.openExternal) {
+    // In Electron app - open in system browser
+    window.browserAPI.openExternal(url);
+  } else {
+    // Fallback for web browser
+    window.open(url, '_blank');
   }
 }
 

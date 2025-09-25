@@ -137,3 +137,6 @@ dist
 
 # Compiled CSS - generated from input.css
 renderer/css/output.css
+
+# User-uploaded files - local storage directory
+backend/uploads/

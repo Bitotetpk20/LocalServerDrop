@@ -6,6 +6,17 @@ A cross-platform Electron desktop application for local file sharing with a buil
 
 LocalServerDrop combines the convenience of a desktop application with the accessibility of a web server to create a seamless file-sharing solution. Upload files through the desktop app or web interface, and share them instantly across your local network. Perfect for quick file transfers between devices without cloud dependencies or complex setup.
 
+## 🚀 Why Use LocalServerDrop?
+
+- **Privacy First**: No cloud services, everything stays on your network
+- **Simple Setup**: No configuration required, works out of the box
+- **Cross-Device Compatible**: Access from any device with a web browser
+- **Lightweight**: Minimal resource usage, fast performance
+- **Professional UI**: Modern design that's pleasant to use
+- **Developer Friendly**: Clean, well-structured codebase for easy modification
+
+Perfect for developers, designers, content creators, or anyone who needs to quickly share files across devices without the hassle of cloud services or complex network setup.
+
 ## ✨ Key Features
 
 - **Drag & Drop Upload**: Simple file uploading with visual feedback
@@ -141,6 +152,10 @@ Built applications will be available in the `dist/` directory.
 - **Path Traversal Protection**: Prevents unauthorized file access
 - **Sandboxed Frontend**: Electron security best practices implemented
 
+Additional notes:
+- **Per-session admin token**: The Electron main process generates a new admin token on each app start and passes it to the server. The token is sent in the `X-Admin-Token` header for delete operations. If you restart the app, the token changes.
+- **Upload safety**: Uploaded filenames are sanitized to their basename (no path components) and a default size limit of 100 MB is enforced (configurable in code).
+
 ## 🎨 UI Features
 
 - **Responsive Design**: Works well on different screen sizes
@@ -153,31 +168,47 @@ Built applications will be available in the `dist/` directory.
 
 - `POST /upload` - Upload a file
 - `GET /list` - List all uploaded files
+   - Returns an array of objects: `{ name: string, size: number }` (`size` in bytes)
 - `GET /files/:filename` - Download a specific file
 - `DELETE /delete/:filename` - Delete a file (admin token required)
+   - Requires header: `X-Admin-Token: <token>`
 - `GET /` - Serve the web interface
 
 ## ⚙️ Configuration
 
-The server runs on port 3000 by default. To change this:
-1. Edit `PORT` variable in `backend/server.js`
-2. Update hardcoded references in other files as needed (Sorry :^)
+- The server runs on port 3000 by default. To change this today you need to edit `PORT` in `backend/server.js` and update hardcoded references where applicable.
+- Binding host can be configured via environment variable:
+   - `LSD_BIND_HOST` (default: `127.0.0.1`)
+   - Note: Keeping it on `127.0.0.1` restricts access to the local machine only.
+- Admin token is managed automatically by the Electron app:
+   - `LSD_ADMIN_TOKEN` is set by the Electron main process per run. You typically do not need to set this manually unless you’re driving the server outside the app.
 
-## 📄 License
+### Test delete from a browser console or external tools
+If you need to verify delete via browser, open `http://127.0.0.1:3000` and in the DevTools console run:
 
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
+```js
+const TOKEN = 'paste-the-admin-token-here';
+const NAME = 'existing-file.ext';
+fetch(`http://127.0.0.1:3000/delete/${encodeURIComponent(NAME)}`, {
+   method: 'DELETE',
+   headers: { 'X-Admin-Token': TOKEN }
+}).then(async r => ({ status: r.status, text: await r.text() }))
+   .then(console.log);
+```
 
-## 👨‍💻 Author
+For testing with **Postman** or **curl**:
+```bash
+# Replace TOKEN_HERE with your actual admin token
+curl -X DELETE "http://127.0.0.1:3000/delete/filename.ext" \
+     -H "X-Admin-Token: TOKEN_HERE"
+```
 
-**KristupasJon** - [GitHub Profile](https://github.com/KristupasJon)
+**Note**: The server's CORS configuration specifically allows the `X-Admin-Token` header for browser console testing and external API tools. Since the token is per-session and managed by the app, delete actions should generally be performed via the Electron UI. Manual testing requires the exact token for that run.
 
-## 🚀 Why Use LocalServerDrop?
+## 🧰 Troubleshooting
 
-- **Privacy First**: No cloud services, everything stays on your network
-- **Simple Setup**: No configuration required, works out of the box
-- **Cross-Device Compatible**: Access from any device with a web browser
-- **Lightweight**: Minimal resource usage, fast performance
-- **Professional UI**: Modern design that's pleasant to use
-- **Developer Friendly**: Clean, well-structured codebase for easy modification
-
-Perfect for developers, designers, content creators, or anyone who needs to quickly share files across devices without the hassle of cloud services or complex network setup.
+- 403 Forbidden on delete:
+   - The admin token likely doesn’t match. Restart the Electron app and try the delete again from within the app UI.
+   - If testing manually, ensure you’re sending the correct `X-Admin-Token` for the current session.
+- CSS not applying after clone:
+   - Run `npm run buildcss` to generate `renderer/css/output.css` (it is not tracked in git).
