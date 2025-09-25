@@ -80,7 +80,7 @@ LocalServerDrop/
    npm install
    ```
 
-3. **Build CSS (if making style changes)**
+3. **Build CSS (required - output.css is not tracked in git)**
    ```bash
    npm run buildcss
    ```
