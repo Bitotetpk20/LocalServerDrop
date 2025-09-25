@@ -1,12 +1,31 @@
 # LocalServerDrop
 
-A cross-platform Electron desktop application for local file sharing with a built-in web server. Share files effortlessly across your local network with a modern, intuitive interface.
+A cross-platform Electron desktop application for local file sharing with a built-in web server. Share files effortlessly across your local network with a modern, intuitiv## Configuration
 
-## 🎯 What is LocalServerDrop?
+- The server runs on ## Troubleshooting
+
+> [!TIP]
+> **Common Issues and Solutions:**
+> 
+> **403 Forbidden on delete:**
+> - The admin token likely doesn't match. Restart the Electron app and try the delete again from within the app UI.
+> - If testing manually, ensure you're sending the correct `X-Admin-Token` for the current session.
+> 
+> **CSS not applying after clone:**
+> - Run `npm run buildcss` to generate `renderer/css/output.css` (it is not tracked in git).00 by default. To change this today you need to edit `PORT` in `backend/server.js` and update hardcoded references where applicable.
+- Binding host can be configured via environment variable:
+   - `LSD_BIND_HOST` (default: `127.0.0.1`)
+- Admin token is managed automatically by the Electron app:
+   - `LSD_ADMIN_TOKEN` is set by the Electron main process per run. You typically do not need to set this manually unless you're driving the server outside the app.
+
+> [!NOTE]
+> Keeping the binding host on `127.0.0.1` restricts access to the local machine only. Change `LSD_BIND_HOST` to `0.0.0.0` to allow network access.ace.
+
+## What is LocalServerDrop?
 
 LocalServerDrop combines the convenience of a desktop application with the accessibility of a web server to create a seamless file-sharing solution. Upload files through the desktop app or web interface, and share them instantly across your local network. Perfect for quick file transfers between devices without cloud dependencies or complex setup.
 
-## 🚀 Why Use LocalServerDrop?
+## Why Use LocalServerDrop?
 
 - **Privacy First**: No cloud services, everything stays on your network
 - **Simple Setup**: No configuration required, works out of the box
@@ -17,7 +36,7 @@ LocalServerDrop combines the convenience of a desktop application with the acces
 
 Perfect for developers, designers, content creators, or anyone who needs to quickly share files across devices without the hassle of cloud services or complex network setup.
 
-## ✨ Key Features
+## Key Features
 
 - **Drag & Drop Upload**: Simple file uploading with visual feedback
 - **Cross-Platform**: Works on Windows, macOS, and Linux
@@ -28,7 +47,7 @@ Perfect for developers, designers, content creators, or anyone who needs to quic
 - **Security**: Admin-only file deletion with token authentication
 - **No External Dependencies**: Everything runs locally on your machine
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Frontend
 - **Electron**: Cross-platform desktop app framework
@@ -47,7 +66,7 @@ Perfect for developers, designers, content creators, or anyone who needs to quic
 - **Nodemon**: Auto-restart development server
 - **Tailwind CLI**: CSS compilation and optimization
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 LocalServerDrop/
@@ -71,7 +90,7 @@ LocalServerDrop/
 └── package.json           # Dependencies and build configuration
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -83,6 +102,9 @@ LocalServerDrop/
 2. Run as administrator (for proper installation)
 3. Follow the setup wizard
 4. Launch from Start Menu or desktop shortcut
+
+> [!TIP]
+> Run the installer as administrator to ensure proper installation and avoid permission issues.
 
 ### Running with Node.js runtime (No installation)
 
@@ -102,6 +124,9 @@ LocalServerDrop/
    npm run buildcss
    ```
 
+   > [!NOTE]
+   > The CSS build step is required because `output.css` is not tracked in git. You must run this command before starting the application.
+
 4. **Start the application**
    ```bash
    npm start
@@ -116,7 +141,7 @@ npm run dev
 
 This watches for changes in `main`, `renderer`, `preload`, and `backend` directories.
 
-## 📦 Building for Distribution
+## Building for Distribution
 
 Build for your current platform:
 ```bash
@@ -132,7 +157,7 @@ npm run build:linux  # Linux
 
 Built applications will be available in the `dist/` directory.
 
-## 🌐 Usage
+## Usage
 
 ### Desktop App
 1. Launch LocalServerDrop
@@ -151,18 +176,22 @@ Built applications will be available in the `dist/` directory.
 - Other devices on your network can access files by visiting `http://[YOUR-IP]:3000`
 - Find your IP address using `ipconfig` (Windows) or `ifconfig` (Mac/Linux)
 
-## 🔒 Security Features
+> [!TIP]
+> To share files across your network, replace `[YOUR-IP]` with your actual IP address. Use `ipconfig` on Windows or `ifconfig` on Mac/Linux to find your IP.
+
+## Security Features
 
 - **Local Network Only**: Server binds to localhost by default
 - **Admin Token Authentication**: File deletion requires admin token
 - **Path Traversal Protection**: Prevents unauthorized file access
 - **Sandboxed Frontend**: Electron security best practices implemented
 
-Additional notes:
-- **Per-session admin token**: The Electron main process generates a new admin token on each app start and passes it to the server. The token is sent in the `X-Admin-Token` header for delete operations. If you restart the app, the token changes.
-- **Upload safety**: Uploaded filenames are sanitized to their basename (no path components) and a default size limit of 100 MB is enforced (configurable in code).
+> [!NOTE]
+> **Security Notes:**
+> - **Per-session admin token**: A new admin token is generated on each app start and passed to the server via `X-Admin-Token` header for delete operations. Restarting the app changes the token.
+> - **Upload safety**: Filenames are sanitized to their basename (no path components) with a 100 MB size limit (configurable in code).
 
-## 🎨 UI Features
+## UI Features
 
 - **Responsive Design**: Works well on different screen sizes
 - **File Type Icons**: Visual representation for different file formats
@@ -170,7 +199,7 @@ Additional notes:
 - **Custom Scrollbars**: Styled to match the app's aesthetic
 - **Gradient Effects**: Modern visual design with glass morphism elements
 
-## 📋 API Endpoints
+## API Endpoints
 
 - `POST /upload` - Upload a file
 - `GET /list` - List all uploaded files
@@ -180,7 +209,7 @@ Additional notes:
    - Requires header: `X-Admin-Token: <token>`
 - `GET /` - Serve the web interface
 
-## ⚙️ Configuration
+## Configuration
 
 - The server runs on port 3000 by default. To change this today you need to edit `PORT` in `backend/server.js` and update hardcoded references where applicable.
 - Binding host can be configured via environment variable:
@@ -209,9 +238,10 @@ curl -X DELETE "http://127.0.0.1:3000/delete/filename.ext" \
      -H "X-Admin-Token: TOKEN_HERE"
 ```
 
-**Note**: The server's CORS configuration specifically allows the `X-Admin-Token` header for browser console testing and external API tools. Since the token is per-session and managed by the app, delete actions should generally be performed via the Electron UI. Manual testing requires the exact token for that run.
+> [!NOTE]
+> The server's CORS configuration specifically allows the `X-Admin-Token` header for browser console testing and external API tools. Since the token is per-session and managed by the app, delete actions should generally be performed via the Electron UI. Manual testing requires the exact token for that run.
 
-## 🧰 Troubleshooting
+## Troubleshooting
 
 - 403 Forbidden on delete:
    - The admin token likely doesn’t match. Restart the Electron app and try the delete again from within the app UI.
