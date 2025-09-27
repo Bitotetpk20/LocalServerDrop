@@ -52,5 +52,16 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
     }
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KristupasJon/LocalServerDrop.git"
+  },
+  "keywords": [
+    "localserverdrop"
+  ],
+  "bugs": {
+    "url": "https://github.com/KristupasJon/LocalServerDrop/issues"
+  },
+  "homepage": "https://github.com/KristupasJon/LocalServerDrop#readme"
 }
