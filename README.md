@@ -6,10 +6,8 @@ A cross-platform Electron desktop application that will act as a local file serv
 
 LocalServerDrop combines the convenience of a desktop application with the accessibility of a web server to create a seamless filesharing solution. Upload files through the desktop app or web interface, and share them instantly across your local network. Perfect for quick file transfers between devices without cloud dependencies or complex setup.
 
-<img width="1463" height="1084" alt="Screenshot 2025-09-25 172102" src="https://github.com/user-attachments/assets/9e1fdd7c-3c17-4c5c-8604-b7963a2f9111" />
-<img width="2047" height="884" alt="Screenshot 2025-09-25 172226" src="https://github.com/user-attachments/assets/bcf20018-3e3c-48cc-9114-e127fe068118" />
-
-
+<img width="1191" height="666" alt="image" src="https://github.com/user-attachments/assets/2f74e96c-e5cc-4bc7-bc0e-6cf34bcf22af" />
+<img width="1489" height="510" alt="image" src="https://github.com/user-attachments/assets/827b7e99-1b10-4e1e-bb6b-ab558c6769ea" />
 
 ## Why LocalServerDrop?
 
@@ -147,8 +145,7 @@ Built applications will be available in the `dist/` directory.
 > [!IMPORTANT]
 > Windows Firewall may block inbound connections the first time the server runs. Approve the prompt when Windows asks to allow access. If needed, you can add a rule to allow TCP 8080.
 
-<img width="1557" height="1039" alt="Screenshot 2025-09-25 205903" src="https://github.com/user-attachments/assets/98aa778e-5276-44ed-967f-6a16d9186c34" />
-
+<img width="554" height="517" alt="image" src="https://github.com/user-attachments/assets/ab4372dd-e65a-47bf-8d71-becde517d125" />
 
 Windows PowerShell (run as Administrator):
 
