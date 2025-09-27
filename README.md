@@ -1,6 +1,6 @@
 # LocalServerDrop
 
-A cross-platform Electron desktop application that will act as a local file server sharing with a built-in Express web server, with Multer storage. Share files fast across your local network.
+A cross-platform Electron desktop application that will act as a local file sharing server using Express web server, with Multer storage. Share files fast across your local network.
 
 ## What is LocalServerDrop?
 
@@ -24,7 +24,6 @@ Perfect for developers, designers, content creators, or anyone who needs to quic
 
 - **Drag & Drop Upload**: Simple file uploading with visual feedback
 - **Cross-Platform**: Works on Windows, macOS, and Linux
-- **System Tray Integration**: Minimizes to system tray instead of closing, keeps server running in background
 - **Local Network Sharing**: Access files via web browser at `localhost:8080` (Or use your device IPv4 shown in the app for LAN access)
 - **Real-time File Management**: View, download, and delete files instantly
 - **Modern UI**: Beautiful dark theme with gradient effects and smooth animations
@@ -126,10 +125,6 @@ Built applications will be available in the `dist/` directory.
 3. Files are automatically uploaded to the local server
 4. Use the "File Vault" section to manage uploaded files
 5. Click the server button to open the web interface — the button shows your device IPv4 (for example, `192.168.1.50:8080`) inside Electron; on the same machine it may show `localhost:8080`
-6. **System Tray**: When you close the window, the app minimizes to the system tray and keeps running in the background
-   - **Right-click** the tray icon for Show/Hide/Quit options
-   - **Double-click** the tray icon to toggle window visibility
-   - The server remains active even when the window is hidden
 
 ### Web Interface
 1. Open any web browser
