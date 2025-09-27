@@ -1,17 +1,16 @@
 {
   "name": "localserverdrop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Local file sharing server and multiplatform electron app",
   "main": "main/index.js",
   "scripts": {
     "start": "electron .",
     "dev": "nodemon --watch main --watch renderer --watch preload --watch backend --ext html,js,css --exec \"electron .\"",
-    "buildcss": "npx @tailwindcss/cli -i ./renderer/css/input.css -o ./renderer/css/output.css --watch",
-    "build": "electron-builder",
+    "build:css": "npx @tailwindcss/cli -i ./renderer/css/input.css -o ./renderer/css/output.css",
+    "build": "npm run build:css && electron-builder",
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",
-    "build:linux": "electron-builder --linux",
-    "dist": "npm run build"
+    "build:linux": "electron-builder --linux"
   },
   "author": "KristupasJon",
   "license": "ISC",
@@ -35,9 +34,7 @@
       "main/**/*",
       "renderer/**/*",
       "preload/**/*",
-      "backend/**/*",
-      "node_modules/**/*",
-      "package.json"
+      "backend/**/*"
     ],
     "win": {
       "target": "nsis",
@@ -45,11 +42,11 @@
     },
     "mac": {
       "target": "dmg",
-      "icon": "renderer/assets/icon.ico"
+      "icon": "renderer/assets/icns.icns"
     },
     "linux": {
       "target": "AppImage",
-      "icon": "renderer/assets/icon.ico"
+      "icon": "renderer/assets/favicon.png"
     },
     "nsis": {
       "oneClick": false,

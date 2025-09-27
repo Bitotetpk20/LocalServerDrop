@@ -18,14 +18,15 @@ const SHARED_DIR = isDev ?
 // enable CORS
 expressApp.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-Admin-Token');
     res.header('Access-Control-Allow-Credentials', 'false');
-    res.header('Access-Control-Max-Age', '86400'); // 24 hours
+    res.header('Access-Control-Max-Age', '300');
     
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(204);
-    }
+    // if (req.method === 'OPTIONS') {
+    //     return res.sendStatus(204);
+    // }
+    
     next();
 });
 

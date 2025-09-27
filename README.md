@@ -11,13 +11,12 @@ LocalServerDrop combines the convenience of a desktop application with the acces
 
 
 
-## Why Use LocalServerDrop?
+## Why LocalServerDrop?
 
-- **Privacy First**: No cloud services, everything stays on your network.
-- **Simple Setup**: No configuration required, works out of the box.
-- **Cross-Device Compatible**: Access from any device with a web browser or run the application which is also multiplatform (Electron)
+- **Privacy First**: No cloud services, everything stays on your private network.
+- **Simple Setup**: No configuration required, install and use.
+- **Cross-Device Compatible**: Access from any device with a web browser or run the application which is also multiplatform (Electron).
 - **Fast**: Local network speeds should be blazing fast, much MUCH faster than any online provider.
-- **Professional UI**: Modern design that's pleasant to use.
 - **Secure**: Only users with the admin token can delete files, ensuring unauthorized users cannot remove shared content. IPC handlers and correct filepath resolution make it much safer than most other available solutions that usually offer little to no security.
 - **Developer Friendly**: Clean codebase for easy modification.
 
@@ -27,6 +26,7 @@ Perfect for developers, designers, content creators, or anyone who needs to quic
 
 - **Drag & Drop Upload**: Simple file uploading with visual feedback
 - **Cross-Platform**: Works on Windows, macOS, and Linux
+- **System Tray Integration**: Minimizes to system tray instead of closing, keeps server running in background
 - **Local Network Sharing**: Access files via web browser at `localhost:8080` (Or use your device IPv4 shown in the app for LAN access)
 - **Real-time File Management**: View, download, and delete files instantly
 - **Modern UI**: Beautiful dark theme with gradient effects and smooth animations
@@ -52,30 +52,6 @@ Perfect for developers, designers, content creators, or anyone who needs to quic
 - **Electron Builder**: Package and distribute the app
 - **Nodemon**: Auto-restart development server
 - **Tailwind CLI**: CSS compilation and optimization
-
-## Project Structure
-
-```
-LocalServerDrop/
-├── main/                   # Electron main process
-│   └── index.js           # App initialization and IPC handlers
-├── renderer/              # Frontend UI
-│   ├── index.html         # Main application interface
-│   ├── css/              
-│   │   ├── input.css      # Custom styles and Tailwind imports
-│   │   └── output.css     # Compiled Tailwind CSS
-│   ├── js/
-│   │   └── app.js         # Frontend JavaScript logic
-│   └── assets/
-│       ├── favicon.svg
-│       └── icon.ico
-├── preload/               # Electron security layer
-│   └── preload.js         # IPC communication bridge
-├── backend/               # Express server
-│   ├── server.js          # HTTP server and API endpoints
-│   └── uploads/           # File storage directory
-└── package.json           # Dependencies and build configuration
-```
 
 ## Getting Started
 
@@ -152,6 +128,10 @@ Built applications will be available in the `dist/` directory.
 3. Files are automatically uploaded to the local server
 4. Use the "File Vault" section to manage uploaded files
 5. Click the server button to open the web interface — the button shows your device IPv4 (for example, `192.168.1.50:8080`) inside Electron; on the same machine it may show `localhost:8080`
+6. **System Tray**: When you close the window, the app minimizes to the system tray and keeps running in the background
+   - **Right-click** the tray icon for Show/Hide/Quit options
+   - **Double-click** the tray icon to toggle window visibility
+   - The server remains active even when the window is hidden
 
 ### Web Interface
 1. Open any web browser
@@ -196,14 +176,6 @@ Remove-NetFirewallRule -DisplayName "LocalServerDrop 8080"
 > **Security Notes:**
 > - **Per-session admin token**: A new admin token is generated on each app start and passed to the server via `X-Admin-Token` header for delete operations. Restarting the app changes the token.
 > - **Upload safety**: Filenames are sanitized to their basename (no path components). No explicit file size limit is enforced by default; add a Multer limit in code if you need one.
-
-## UI Features
-
-- **Responsive Design**: Works well on different screen sizes
-- **File Type Icons**: Visual representation for different file formats
-- **Smooth Animations**: Polished user experience with CSS transitions
-- **Custom Scrollbars**: Styled to match the app's aesthetic
-- **Gradient Effects**: Modern visual design with glass morphism elements
 
 ## API Endpoints
 

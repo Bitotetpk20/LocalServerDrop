@@ -50,17 +50,17 @@ input.addEventListener('change', () => {
   const fileSize = formatFileSize(file.size / (1024 * 1024));
   
   info.innerHTML = `
-    <div class="flex items-center justify-center space-x-4 p-4 bg-slate-800/50 rounded-xl border border-slate-600/50">
-      <div class="w-12 h-12 rounded-xl bg-gradient-to-r ${getFileColor(file.name.split('.').pop())} flex items-center justify-center">
-        <span class="text-xl">${fileIcon}</span>
+    <div class="flex items-center justify-center space-x-3 p-3 bg-purple-100/70 rounded-lg border border-purple-200/50">
+      <div class="w-10 h-10 rounded-lg bg-gradient-to-r ${getFileColor(file.name.split('.').pop())} flex items-center justify-center">
+        <span class="text-lg">${fileIcon}</span>
       </div>
       <div class="flex-1 text-left">
-        <p class="text-slate-200 font-semibold">${file.name}</p>
-        <p class="text-slate-400 text-sm">${fileSize} • ${file.type || 'Unknown type'}</p>
+        <p class="text-purple-800 font-semibold text-sm">${file.name}</p>
+        <p class="text-purple-600 text-xs">${fileSize} • ${file.type || 'Unknown type'}</p>
       </div>
       <div class="flex items-center space-x-2">
-        <div class="w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
-        <span class="text-blue-400 font-medium">Uploading...</span>
+        <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+        <span class="text-purple-600 font-medium text-sm">Uploading...</span>
       </div>
     </div>
   `;
@@ -75,16 +75,16 @@ input.addEventListener('change', () => {
   .then(res => res.text())
   .then(msg => {
     info.innerHTML = `
-      <div class="flex items-center justify-center space-x-4 p-4 bg-emerald-900/30 rounded-xl border border-emerald-500/50">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-r ${getFileColor(file.name.split('.').pop())} flex items-center justify-center">
-          <span class="text-xl">${fileIcon}</span>
+      <div class="flex items-center justify-center space-x-3 p-3 bg-green-100/70 rounded-lg border border-green-300/50">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-r ${getFileColor(file.name.split('.').pop())} flex items-center justify-center">
+          <span class="text-lg">${fileIcon}</span>
         </div>
         <div class="flex-1 text-left">
-          <p class="text-emerald-200 font-semibold">${file.name}</p>
-          <p class="text-emerald-300 text-sm">✅ ${msg}</p>
+          <p class="text-green-800 font-semibold text-sm">${file.name}</p>
+          <p class="text-green-700 text-xs">✅ ${msg}</p>
         </div>
-        <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
-          <span class="text-white text-sm">✓</span>
+        <div class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+          <span class="text-white text-xs">✓</span>
         </div>
       </div>
     `;
@@ -92,16 +92,16 @@ input.addEventListener('change', () => {
   })
   .catch(err => {
     info.innerHTML = `
-      <div class="flex items-center justify-center space-x-4 p-4 bg-red-900/30 rounded-xl border border-red-500/50">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center">
-          <span class="text-xl">⚠️</span>
+      <div class="flex items-center justify-center space-x-3 p-3 bg-red-100/70 rounded-lg border border-red-300/50">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center">
+          <span class="text-lg">⚠️</span>
         </div>
         <div class="flex-1 text-left">
-          <p class="text-red-200 font-semibold">${file.name}</p>
-          <p class="text-red-300 text-sm">❌ Upload failed: ${err}</p>
+          <p class="text-red-800 font-semibold text-sm">${file.name}</p>
+          <p class="text-red-700 text-xs">❌ Upload failed: ${err}</p>
         </div>
-        <button onclick="info.innerHTML=''" class="w-8 h-8 rounded-full bg-red-500 hover:bg-red-400 flex items-center justify-center transition-colors">
-          <span class="text-white text-sm">x</span>
+        <button onclick="info.innerHTML=''" class="w-6 h-6 rounded-full bg-red-500 hover:bg-red-400 flex items-center justify-center transition-colors">
+          <span class="text-white text-xs">x</span>
         </button>
       </div>
     `;
@@ -118,13 +118,13 @@ function loadFiles() {
       if (files.length === 0) {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td colspan="3" class="px-8 py-16 text-center">
-            <div class="flex flex-col items-center space-y-4">
-              <div class="w-20 h-20 rounded-full bg-gradient-to-r from-slate-700 to-slate-600 flex items-center justify-center opacity-50">
-                <span class="text-2xl">📭</span>
+          <td colspan="3" class="px-6 py-12 text-center">
+            <div class="flex flex-col items-center space-y-3">
+              <div class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-300 to-violet-300 flex items-center justify-center opacity-60">
+                <span class="text-xl">📭</span>
               </div>
-              <p class="text-slate-400 font-medium text-lg">No files shared yet</p>
-              <p class="text-slate-500 text-sm">Upload your first file to get started</p>
+              <p class="text-purple-600 font-medium text-base">No files shared yet</p>
+              <p class="text-purple-500 text-sm">Upload your first file to get started</p>
             </div>
           </td>
         `;
@@ -137,8 +137,8 @@ function loadFiles() {
         const isElectron = window.adminAPI && window.adminAPI.isElectronApp();
         
         row.className = `
-          hover:bg-slate-800/30 transition-all duration-300 group/row
-          border-l-4 border-transparent hover:border-violet-500/50
+          hover:bg-purple-100/40 transition-all duration-300 group/row
+          border-l-4 border-transparent hover:border-purple-400/50
           animate-fade-in
         `.replace(/\s+/g, ' ').trim();
         row.style.animationDelay = `${index * 100}ms`;
@@ -150,43 +150,43 @@ function loadFiles() {
         const fileIcon = getFileIcon(fileExt);
         
         row.innerHTML = `
-          <td class="px-8 py-6 border-r border-slate-700/30">
-            <div class="flex items-center space-x-4">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-r ${getFileColor(fileExt)} flex items-center justify-center shadow-lg">
-                <span class="text-lg">${fileIcon}</span>
+          <td class="px-6 py-4 border-r border-purple-200/30">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-lg bg-gradient-to-r ${getFileColor(fileExt)} flex items-center justify-center shadow-md">
+                <span class="text-sm">${fileIcon}</span>
               </div>
               <div class="flex-1">
-                <p class="text-slate-200 font-semibold group-hover/row:text-white transition-colors duration-200">${fileName}</p>
-                <p class="text-slate-500 text-xs">File • ${formatFileSize(fileSize / (1024 * 1024))}</p>
+                <p class="text-purple-800 font-semibold group-hover/row:text-purple-900 transition-colors duration-200 text-sm">${fileName}</p>
+                <p class="text-purple-600 text-xs">File • ${formatFileSize(fileSize / (1024 * 1024))}</p>
               </div>
             </div>
           </td>
-          <td class="px-8 py-6 border-r border-slate-700/30">
+          <td class="px-6 py-4 border-r border-purple-200/30">
             <a href="${getServerUrl()}/files/${encodeURIComponent(fileName)}" download>
-              <button class="group/btn relative overflow-hidden px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 rounded-xl transition-all duration-300 text-white font-semibold shadow-lg hover:shadow-blue-500/25 hover:scale-105">
+              <button class="group/btn relative overflow-hidden px-4 py-2 bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600 rounded-lg transition-all duration-300 text-white font-semibold shadow-md hover:shadow-purple-500/25 hover:scale-105 text-sm">
                 <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-500"></div>
-                <div class="relative flex items-center space-x-2">
-                  <span>⬇️</span>
+                <div class="relative flex items-center space-x-1">
+                  <span class="text-xs">⬇️</span>
                   <span>Download</span>
                 </div>
               </button>
             </a>
           </td>
-          <td class="px-8 py-6 ${isElectron ? 'border-r border-slate-700/30' : ''}">
-            <button onclick="shareFile('${fileName}')" class="group/btn relative overflow-hidden px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 rounded-xl transition-all duration-300 text-white font-semibold shadow-lg hover:shadow-emerald-500/25 hover:scale-105">
+          <td class="px-6 py-4 ${isElectron ? 'border-r border-purple-200/30' : ''}">
+            <button onclick="shareFile('${fileName}')" class="group/btn relative overflow-hidden px-4 py-2 bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 rounded-lg transition-all duration-300 text-white font-semibold shadow-md hover:shadow-violet-500/25 hover:scale-105 text-sm">
               <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-500"></div>
-              <div class="relative flex items-center space-x-2">
-                <span>🔗</span>
+              <div class="relative flex items-center space-x-1">
+                <span class="text-xs">🔗</span>
                 <span>Share</span>
               </div>
             </button>
           </td>
           ${isElectron ? `
-            <td class="px-8 py-6">
-              <button onclick="deleteFile('${fileName}')" class="group/btn relative overflow-hidden px-6 py-3 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 rounded-xl transition-all duration-300 text-white font-semibold shadow-lg hover:shadow-red-500/25 hover:scale-105">
+            <td class="px-6 py-4">
+              <button onclick="deleteFile('${fileName}')" class="group/btn relative overflow-hidden px-4 py-2 bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 rounded-lg transition-all duration-300 text-white font-semibold shadow-md hover:shadow-red-500/25 hover:scale-105 text-sm">
                 <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-500"></div>
-                <div class="relative flex items-center space-x-2">
-                  <span>🗑️</span>
+                <div class="relative flex items-center space-x-1">
+                  <span class="text-xs">🗑️</span>
                   <span>Delete</span>
                 </div>
               </button>
@@ -200,14 +200,14 @@ function loadFiles() {
       console.error('Failed to load files:', err);
       const tbody = document.getElementById('filesTable').querySelector('tbody');
       tbody.innerHTML = `
-        <td colspan="3" class="px-8 py-16 text-center">
-          <div class="flex flex-col items-center space-y-4">
-            <div class="w-20 h-20 rounded-full bg-gradient-to-r from-red-600 to-rose-600 flex items-center justify-center opacity-80">
-              <span class="text-2xl">⚠️</span>
+        <td colspan="3" class="px-6 py-12 text-center">
+          <div class="flex flex-col items-center space-y-3">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-r from-red-500 to-rose-500 flex items-center justify-center opacity-80">
+              <span class="text-xl">⚠️</span>
             </div>
-            <p class="text-red-400 font-semibold text-lg">Failed to load files</p>
-            <p class="text-slate-400 text-sm">Check your connection and try again</p>
-            <button onclick="loadFiles()" class="mt-4 px-4 py-2 bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-400 hover:to-rose-400 rounded-lg text-white font-medium transition-all duration-200">
+            <p class="text-red-600 font-semibold text-base">Failed to load files</p>
+            <p class="text-purple-600 text-sm">Check your connection and try again</p>
+            <button onclick="loadFiles()" class="mt-3 px-3 py-2 bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-400 hover:to-rose-400 rounded-lg text-white font-medium transition-all duration-200 text-sm">
               Try Again
             </button>
           </div>
@@ -263,7 +263,7 @@ function updateTableHeaders() {
   
   if (isElectron && headerRow.children.length === 3) {
     const deleteHeader = document.createElement('th');
-    deleteHeader.className = 'px-8 py-6 text-left text-sm font-bold text-slate-300 uppercase tracking-wider';
+    deleteHeader.className = 'px-6 py-4 text-left text-xs font-bold text-purple-700 uppercase tracking-wider';
     deleteHeader.innerHTML = `
       <div class="flex items-center space-x-2">
         <span>🗑️</span>

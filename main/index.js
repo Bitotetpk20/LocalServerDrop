@@ -1,21 +1,27 @@
 const electron = require('electron');
-const { app, BrowserWindow, ipcMain, shell } = electron;
+const { app, BrowserWindow, ipcMain, shell, screen, Tray, Menu } = electron;
 const path = require('path');
 const crypto = require('crypto');
 
-// Generate a per-session admin token and pass it to the server via env
+// Generate admin token and pass it to the server via env
 const ADMIN_TOKEN = crypto.randomBytes(32).toString('hex');
 process.env.LSD_ADMIN_TOKEN = ADMIN_TOKEN;
 
 // start express server and get server reference
 const { server } = require('../backend/server.js');
 
+let tray = null;
+let mainWindow = null;
+
 const createWindow = () => {
   const isDev = !app.isPackaged;
   
-  const win = new BrowserWindow({
-    width: 1920,
-    height: 1080,
+  // hopefully this works on all platforms
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+  
+  mainWindow = new BrowserWindow({
+    width: width,
+    height: height,
     icon: isDev ? 
       path.join(__dirname, '../renderer/assets/icon.ico') :
       path.join(app.getAppPath(), 'renderer/assets/icon.ico'),
@@ -32,9 +38,64 @@ const createWindow = () => {
     path.join(__dirname, '../renderer/index.html') : 
     path.join(app.getAppPath(), 'renderer/index.html');
   
-  win.loadFile(htmlPath);
-  win.setMenuBarVisibility(false);
+  mainWindow.loadFile(htmlPath);
+  mainWindow.setMenuBarVisibility(false);
+
+  // minimize to tray probably wont work on macOS
+  mainWindow.on('close', (event) => {
+    if (!app.isQuiting) {
+      event.preventDefault();
+      mainWindow.hide();
+    }
+  });
+
+  createTray();
 }
+
+const createTray = () => {
+  const isDev = !app.isPackaged;
+  const iconPath = isDev ? 
+    path.join(__dirname, '../renderer/assets/icon.ico') :
+    path.join(app.getAppPath(), 'renderer/assets/icon.ico');
+    
+  tray = new Tray(iconPath);
+  
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show LocalServerDrop',
+      click: () => {
+        mainWindow.show();
+        mainWindow.focus();
+      }
+    },
+    {
+      label: 'Hide',
+      click: () => {
+        mainWindow.hide();
+      }
+    },
+    { type: 'separator' },
+    {
+      label: 'Quit',
+      click: () => {
+        app.isQuiting = true;
+        app.quit();
+      }
+    }
+  ]);
+  
+  tray.setToolTip('LocalServerDrop - File sharing server');
+  tray.setContextMenu(contextMenu);
+  
+  tray.on('double-click', () => {
+    if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+      mainWindow.focus();
+    }
+  });
+};
 
 // IPC Handlers
 
@@ -95,11 +156,12 @@ const shutdownServer = () => {
 };
 
 app.on('window-all-closed', () => {
-  shutdownServer();
-  if (process.platform !== 'darwin') {
-    app.quit(); // exit completely
+  if (app.isQuiting) {
+    shutdownServer();
+    if (process.platform !== 'darwin') {
+      app.quit();
+    }
   }
-  // macOS keep running in background
 });
 
 app.on('before-quit', () => {
@@ -125,5 +187,8 @@ process.on('SIGTERM', () => {
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
+  } else if (mainWindow) {
+    mainWindow.show();
+    mainWindow.focus();
   }
 });
